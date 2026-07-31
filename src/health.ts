@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 
 export function startHealthServer() {
-  const port = Number(process.env.WORKER_HEALTH_PORT ?? 8080);
+  const port = Number(process.env.PORT ?? process.env.WORKER_HEALTH_PORT ?? 8080);
   const server = createServer((request, response) => {
     if (request.url !== '/health') {
       response.writeHead(404).end();
