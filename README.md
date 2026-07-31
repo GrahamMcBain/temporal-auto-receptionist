@@ -1,8 +1,8 @@
 # Temporal Auto Receptionist
 
-This is a small, developer-focused migration of the scheduling portion of the **Graham Auto Receptionist** LiveKit demo. The LiveKit application proved the real-time voice experience; this project hardens the appointment lifecycle behind it.
+This is a small migration of the scheduling portion of the **Graham Auto Receptionist** realtime voice agent demo. The voice agent application gives a real-time voice experience; this project hardens the appointment lifecycle behind it using Temporal.
 
-**Companion voice application:** [Graham Auto Receptionist (LiveKit)](https://github.com/GrahamMcBain/graham-auto-receptionist)
+**Companion voice application:** [Graham Auto Receptionist](https://github.com/GrahamMcBain/graham-auto-receptionist)
 
 > AI makes it easy to build compelling prototypes quickly. Temporal helps turn those prototypes into dependable systems that can safely perform real customer work.
 
@@ -20,7 +20,7 @@ The original shape is preserved in [`src/before/scheduling-service.ts`](src/befo
 
 ## What is temporalized
 
-The LiveKit agent remains the real-time conversation layer. Once it has collected appointment details, it would start one Temporal workflow per requested appointment.
+The voice agent remains the real-time conversation layer. Once it has collected appointment details, it starts one Temporal workflow per requested appointment.
 
 ```mermaid
 flowchart LR
