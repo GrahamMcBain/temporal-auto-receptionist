@@ -1,0 +1,25 @@
+{
+  "name": "temporal-auto-receptionist",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A durable Temporal appointment workflow extracted from a LiveKit voice-agent prototype.",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev:worker": "tsx src/worker.ts",
+    "start:worker": "node dist/worker.js",
+    "demo": "tsx src/demo.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@temporalio/client": "^1.13.0",
+    "@temporalio/worker": "^1.13.0",
+    "@temporalio/workflow": "^1.13.0"
+  },
+  "devDependencies": {
+    "@temporalio/testing": "^1.13.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  }
+}

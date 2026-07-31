@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temporal Auto Receptionist</title>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, sans-serif; max-width: 44rem; margin: 3rem auto; padding: 0 1rem; color: #14213d; }
+      form, .panel { border: 1px solid #d9e2ec; border-radius: .75rem; padding: 1.25rem; margin: 1rem 0; }
+      label { display: grid; gap: .3rem; margin: .75rem 0; } input, select, button { font: inherit; padding: .55rem; }
+      button { background: #2354d8; color: white; border: 0; border-radius: .4rem; cursor: pointer; margin-right: .5rem; }
+      button.secondary { background: #556987; } #actions { display: none; } code { word-break: break-all; }
+    </style>
+  </head>
+  <body>
+    <h1>Temporal Auto Receptionist</h1>
+    <p>A live durable-booking demo: start a booking, then confirm or cancel it.</p>
+    <form id="booking-form">
+      <label>Name <input name="customerName" value="Ada Lovelace" required /></label>
+      <label>Email <input name="email" type="email" value="ada@example.com" required /></label>
+      <label>Service <select name="service"><option value="oil_change">Oil change</option><option value="tire_rotation">Tire rotation</option><option value="brake_inspection">Brake inspection</option><option value="diagnostic">Diagnostic inspection</option></select></label>
+      <label>Date <input name="date" type="date" required /></label>
+      <label>Requested time <select name="requestedTime"><option>9:00 AM</option><option>10:30 AM</option><option>1:00 PM</option><option>2:30 PM</option><option>3:30 PM</option></select></label>
+      <button>Start durable booking</button>
+    </form>
+    <section id="actions" class="panel">
+      <p>Workflow: <code id="workflow-id"></code></p>
+      <p>Status: <strong id="status">pending</strong></p>
+      <button data-action="confirm">Confirm booking</button>
+      <button class="secondary" data-action="cancel">Cancel booking</button>
+    </section>
+    <p id="message" role="status"></p>
+    <script>
+      const form = document.querySelector('#booking-form');
+      const actions = document.querySelector('#actions');
+      const workflowIdElement = document.querySelector('#workflow-id');
+      const statusElement = document.querySelector('#status');
+      const message = document.querySelector('#message');
+      let workflowId;
+      form.date.value = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = Object.fromEntries(new FormData(form));
+        const response = await fetch('/api/appointments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json();
+        if (!response.ok) return message.textContent = data.error || 'Unable to start booking';
+        workflowId = data.workflowId;
+        workflowIdElement.textContent = workflowId;
+        statusElement.textContent = data.status;
+        actions.style.display = 'block';
+        message.textContent = 'The Workflow is waiting durably for a customer decision.';
+      });
+      actions.addEventListener('click', async (event) => {
+        const action = event.target.dataset.action;
+        if (!action) return;
+        const response = await fetch('/api/appointment-action', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workflowId, action }) });
+        const data = await response.json();
+        if (!response.ok) return message.textContent = data.error || 'Unable to signal booking';
+        statusElement.textContent = action === 'confirm' ? 'confirming' : 'cancelling';
+        message.textContent = 'Signal accepted. The Worker is processing it.';
+        setTimeout(refreshStatus, 800);
+      });
+      async function refreshStatus() {
+        const response = await fetch('/api/appointment-status?workflowId=' + encodeURIComponent(workflowId));
+        const data = await response.json();
+        if (response.ok) statusElement.textContent = data.status;
+      }
+    </script>
+  </body>
+</html>
