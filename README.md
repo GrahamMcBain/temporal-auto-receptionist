@@ -71,6 +71,8 @@ Run the durable-workflow tests with:
 npm test
 ```
 
+The test suite uses Temporal's time-skipping test environment to cover confirmation, cancellation and hold release, the 15-minute expiration path, transient Activity retries, and idempotent appointment creation.
+
 ## Deploy the live demo
 
 The live demo has two deployable parts: the browser/API layer runs on Vercel, while the Temporal Worker runs as an always-on Docker container. Do not deploy the Worker as a Vercel Function; it must poll the Temporal task queue continuously.
