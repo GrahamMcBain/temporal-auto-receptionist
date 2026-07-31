@@ -1,7 +1,9 @@
 import { createTemporalClient, taskQueue } from '../src/temporal-client';
+import { requireInternalApiKey } from './_auth';
 
 export default async function handler(request: any, response: any) {
   if (request.method !== 'POST') return response.status(405).json({ error: 'Method not allowed' });
+  if (!requireInternalApiKey(request, response)) return;
   try {
     const client = await createTemporalClient();
     const workflowId = `appointment-${crypto.randomUUID()}`;

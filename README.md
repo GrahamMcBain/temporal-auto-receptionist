@@ -76,8 +76,9 @@ The live demo has two deployable parts: the browser/API layer runs on Vercel, wh
 1. Create a Temporal Cloud Namespace and API key.
 2. Set the variables in [`.env.example`](.env.example) on both Vercel and the Worker host.
 3. Deploy this repository to Vercel. The static demo is served from `public/` and its API routes start, signal, and query Workflows without exposing Temporal credentials to the browser.
-4. Deploy the included `Dockerfile` to an always-on container service. Configure its health check as `GET /health`; Railway supplies the port automatically.
-5. Open the Vercel URL, start a booking, and use Temporal Cloud UI to inspect the waiting Workflow before confirming or cancelling it.
+4. Set `TEMPORAL_BOOKING_API_SECRET` on Vercel. The deployed LiveKit agent sends this same value as a server-to-server bearer token; the Temporal API never accepts browser requests for booking actions.
+5. Deploy the included `Dockerfile` to an always-on container service. Configure its health check as `GET /health`; Railway supplies the port automatically.
+6. Optionally configure the LiveKit agent with this Vercel URL and the shared secret. Its voice tools can then start a hold and send the caller’s confirmation Signal. Use Temporal Cloud UI to inspect the waiting Workflow before confirming or cancelling it.
 
 The current Activity implementations are in-memory fakes, intentionally suitable only for the walkthrough. Before using the app for real appointments, replace them with database-backed calendar Activities that atomically enforce slot availability.
 
