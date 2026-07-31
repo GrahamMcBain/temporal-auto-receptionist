@@ -2,6 +2,8 @@
 
 This is a small, developer-focused migration of the scheduling portion of the **Graham Auto Receptionist** LiveKit demo. The LiveKit application proved the real-time voice experience; this project hardens the appointment lifecycle behind it.
 
+**Companion voice application:** [Graham Auto Receptionist (LiveKit)](https://github.com/GrahamMcBain/graham-auto-receptionist)
+
 > AI makes it easy to build compelling prototypes quickly. Temporal helps turn those prototypes into dependable systems that can safely perform real customer work.
 
 ## The original demo
